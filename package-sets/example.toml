@@ -1,0 +1,32 @@
+# Example Katari snapshot.
+#
+# Snapshot files live at `package-sets/<date>.toml`. The date is the
+# snapshot's identity — downstream projects pin it via:
+#
+#   [snapshot]
+#   version = "2026-05-01"
+#
+# Every package listed here is guaranteed to compile against every
+# other package in the same snapshot. The set as a whole is verified
+# by CI on every merge.
+
+# Compiler version this snapshot was verified against. The CLI refuses
+# to use a snapshot whose major version does not match the running
+# compiler.
+katari_compiler = "0.1.0"
+
+# ---------------------------------------------------------------------
+# Packages
+# ---------------------------------------------------------------------
+
+[packages.list-utils]
+repo = "https://github.com/example/katari-list-utils"
+ref  = "v0.2.1"
+
+[packages.string-utils]
+repo = "https://github.com/example/katari-string-utils"
+ref  = "v0.1.0"
+
+[packages.json]
+repo = "https://github.com/example/katari-json"
+ref  = "abc1234567890abcdef1234567890abcdef12345"
