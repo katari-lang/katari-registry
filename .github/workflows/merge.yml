@@ -1,0 +1,68 @@
+name: Merge proposal
+
+# When a proposal PR is merged, re-extract the proposal from the merged
+# PR's body, apply it to a fresh checkout of `main`, and push the
+# resulting commit (= packages/<pkg>/<version>.toml + staging.toml diff).
+#
+# We don't reuse the PR-CI's working copy because that commit isn't on
+# main. Re-running here keeps main authoritative.
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.3
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: scripts/pnpm-lock.yaml
+
+      - name: Install script deps
+        working-directory: scripts
+        run: pnpm install --frozen-lockfile
+
+      - name: Write PR body to disk
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: printf '%s' "$PR_BODY" > /tmp/pr-body.md
+
+      - name: Extract proposal
+        working-directory: scripts
+        run: pnpm tsx src/extract-proposal.ts /tmp/pr-body.md /tmp/proposal.toml
+
+      - name: Apply proposal
+        working-directory: scripts
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: pnpm tsx src/apply-proposal.ts /tmp/proposal.toml
+
+      - name: Commit + push
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          git config user.name 'katari-registry-bot'
+          git config user.email 'noreply@github.com'
+          git add packages package-sets
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "apply: #${PR_NUMBER} ${PR_TITLE}"
+          git push origin main

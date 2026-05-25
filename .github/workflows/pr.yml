@@ -1,0 +1,68 @@
+name: PR verify
+
+# Triggered for any change to a PR's description or commits. The
+# workflow:
+#   1. Extracts the ```toml fence from the PR body.
+#   2. Applies the proposal to a clean checkout (= writes
+#      packages/<pkg>/<version>.toml + updates staging.toml).
+#   3. Builds the Katari compiler at the version pinned by staging.toml.
+#   4. Runs `verify.ts staging` to typecheck the new staging set.
+#
+# The applied files are NOT pushed back to the PR branch — they live
+# only in this workflow run. On merge (= merge.yml) the same apply
+# pipeline runs against `main` and pushes the resulting commits.
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.1.3
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: scripts/pnpm-lock.yaml
+
+      - name: Install script deps
+        working-directory: scripts
+        run: pnpm install --frozen-lockfile
+
+      - name: Write PR body to disk
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: printf '%s' "$PR_BODY" > /tmp/pr-body.md
+
+      - name: Extract proposal
+        working-directory: scripts
+        run: pnpm tsx src/extract-proposal.ts /tmp/pr-body.md /tmp/proposal.toml
+
+      - name: Apply proposal (write metadata + update staging)
+        working-directory: scripts
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: pnpm tsx src/apply-proposal.ts /tmp/proposal.toml
+
+      - name: Show resulting diff
+        run: git diff --stat && git diff
+
+      - name: Build katari (version from staging.toml)
+        id: katari
+        uses: ./.github/actions/build-katari
+
+      - name: Verify staging
+        working-directory: scripts
+        env:
+          KATARI_BIN: ${{ steps.katari.outputs.binary }}
+        run: pnpm tsx src/verify.ts staging

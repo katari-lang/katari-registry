@@ -1,0 +1,51 @@
+name: Build Katari
+description: |
+  Build the Katari compiler at the version pinned by
+  package-sets/staging.toml's `katari_compiler` field. The git tag
+  must exist on yukikurage/katari as `v<version>`.
+
+outputs:
+  binary:
+    description: Absolute path to the built katari binary
+    value: ${{ steps.build.outputs.bin }}
+  version:
+    description: The katari_compiler version parsed from staging.toml
+    value: ${{ steps.read_version.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    - name: Read katari version from staging.toml
+      id: read_version
+      shell: bash
+      run: |
+        # staging.toml uses the form: katari_compiler = "X.Y.Z"
+        VER=$(grep -E '^katari_compiler[[:space:]]*=' package-sets/staging.toml \
+              | sed -E 's/.*"([^"]+)".*/\1/' | head -n1)
+        if [ -z "$VER" ]; then
+          echo "::error::could not parse katari_compiler from package-sets/staging.toml"
+          exit 1
+        fi
+        echo "version=$VER" >> "$GITHUB_OUTPUT"
+        echo "Using katari v$VER"
+
+    - name: Checkout katari compiler
+      uses: actions/checkout@v4
+      with:
+        repository: yukikurage/katari
+        ref: v${{ steps.read_version.outputs.version }}
+        path: .katari-src
+
+    - uses: haskell-actions/setup@v2
+      with:
+        enable-stack: true
+        stack-version: latest
+
+    - name: Build katari binary
+      id: build
+      shell: bash
+      run: |
+        cd .katari-src
+        stack build katari:exe:katari \
+          --copy-bins --local-bin-path "$GITHUB_WORKSPACE/.katari-bin"
+        echo "bin=$GITHUB_WORKSPACE/.katari-bin/katari" >> "$GITHUB_OUTPUT"

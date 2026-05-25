@@ -1,0 +1,15 @@
+# package-sets/staging.toml
+#
+# Next snapshot candidate. PRs that add / update / remove packages
+# land here first. The nightly CI verifies the full set and, if
+# every package still compiles, cuts a frozen
+# `snapshots/snapshot-<date>-<hash>.toml`.
+#
+# This file is mutable. Downstream projects pinning `snapshot =
+# "staging"` follow the moving edge — useful for catching incompat
+# early; not recommended for production builds.
+
+katari_compiler = "0.1.0"
+
+# No packages yet. The first PR adds them via the PR body proposal flow
+# (see README + .github/PULL_REQUEST_TEMPLATE.md).
