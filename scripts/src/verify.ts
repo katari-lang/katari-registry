@@ -3,13 +3,17 @@
 // The verify is a 3-step process:
 //
 //   1. Construct a synthetic Katari project in a temp directory whose
-//      [dependencies].packages lists every package in the snapshot
-//      (or the subset given by --packages).
-//   2. Point [dependencies].registry at this repo via file:// URL so
-//      `katari check` resolves snapshot pins locally.
-//   3. Run `katari check`. The compiler fetches every dep, verifies
-//      sha256 against the snapshot's pin, parses every dep's modules,
-//      and typechecks the synthetic root.
+//      root module imports every package in the snapshot (or the subset
+//      given by --packages). Its [dependencies].registry points at this
+//      repo via a file:// URL so pins resolve against the local layout.
+//   2. `katari add <packages>`: the network resolve. It loads the
+//      snapshot, fetches every pinned tarball, verifies each sha256
+//      against the pin, and writes katari.lock. (`check`/`build` resolve
+//      OFFLINE from that lock, so the registry pins have to be resolved
+//      and locked first — running `check` on an unlocked project only
+//      reports that the lock is missing.)
+//   3. `katari check`: typecheck the assembled closure — every dep's
+//      modules plus the synthetic root — against the locked sources.
 //
 // Usage:
 //   tsx src/verify.ts <snapshot-path-or-staging>
@@ -60,8 +64,12 @@ async function main(): Promise<void> {
   const projectDir = await mkdtemp(join(tmpdir(), "katari-registry-verify-"));
   try {
     await scaffoldProject(projectDir, snapshot, selectedNames);
-    const ok = runKatariCheck(projectDir);
-    if (!ok) {
+    // Resolve the registry pins into katari.lock, then typecheck the locked closure. Either step
+    // failing is a failed verify.
+    if (!runKatari(["add", ...selectedNames], projectDir)) {
+      throw new Error(`katari add (resolve) failed in ${projectDir}`);
+    }
+    if (!runKatari(["check"], projectDir)) {
       throw new Error(`katari check failed in ${projectDir}`);
     }
     console.log(`verified ${selectedNames.length} packages`);
@@ -136,17 +144,21 @@ async function scaffoldProject(
   // (= the dir CONTAINING package-sets/).
   const registryUrl = `file://${repoRoot}`;
 
+  // A minimal VALID katari.toml (Katari.Project.Config): [package] + a REQUIRED [runtime] section
+  // (there is no [compile] section — the source dir is [package].src, defaulting to "src"). packages
+  // starts empty; `katari add` fills it in and writes katari.lock.
   const katariToml = [
     `[package]`,
     `name = "registry_verify_root"`,
     ``,
-    `[compile]`,
-    `src = "src"`,
+    `[runtime]`,
+    // Never contacted by `add`/`check` (both resolve locally); the URL only satisfies the schema.
+    `url = "http://localhost:3000"`,
     ``,
     `[dependencies]`,
     `registry = "${registryUrl}"`,
     `snapshot = "${snapshot.registrySnapshotName}"`,
-    `packages = [${selected.map((n) => `"${n}"`).join(", ")}]`,
+    `packages = []`,
     ``,
   ].join("\n");
   await writeFile(join(projectDir, "katari.toml"), katariToml, "utf-8");
@@ -166,15 +178,17 @@ async function scaffoldProject(
   await readToml(checkPath);
 }
 
-function runKatariCheck(projectDir: string): boolean {
+// Run one katari subcommand against the scaffolded project. `-C DIR` selects the project directory
+// (Katari.Cli.Options.directoryOption). KATARI_BIN overrides the binary discovered on PATH.
+function runKatari(args: string[], projectDir: string): boolean {
   const katari = process.env.KATARI_BIN ?? "katari";
-  const result = spawnSync(katari, ["check", "-p", projectDir], {
+  const result = spawnSync(katari, [...args, "-C", projectDir], {
     stdio: "inherit",
     encoding: "utf-8",
   });
   if (result.error) {
     throw new Error(
-      `failed to run '${katari} check': ${result.error.message}. Set KATARI_BIN to override the binary path.`,
+      `failed to run '${katari} ${args.join(" ")}': ${result.error.message}. Set KATARI_BIN to override the binary path.`,
     );
   }
   return result.status === 0;
