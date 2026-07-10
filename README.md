@@ -1,6 +1,6 @@
 # katari-registry
 
-Centralized snapshot registry for the [Katari](https://github.com/yukikurage/katari)
+Centralized snapshot registry for the [Katari](https://github.com/katari-lang/katari)
 ecosystem. A **snapshot** is a curated set of (package, version) pairs
 that are guaranteed to compile together.
 
@@ -33,7 +33,7 @@ A downstream project pins a snapshot by name:
 ```toml
 # katari.toml in a downstream project
 [dependencies]
-registry = "https://raw.githubusercontent.com/yukikurage/katari-registry/main"
+registry = "https://raw.githubusercontent.com/katari-lang/katari-registry/main"
 snapshot = "snapshot-2026-05-25-abc123"   # or "staging" for early access
 ```
 
@@ -67,7 +67,7 @@ gives you a TOML block to fill in:
 kind = "add"                                       # "add" | "update" | "remove"
 name = "list_utils"
 version = "1.0.0"                                  # omit for "remove"
-repo = "https://github.com/yukikurage/katari-list-utils"  # omit for "remove"
+repo = "https://github.com/katari-lang/katari-list-utils"  # omit for "remove"
 ref = "v1.0.0"                                     # omit for "remove"
 ```
 ````
@@ -110,7 +110,7 @@ expected to file a fix (or have their package removed via an explicit
 ```toml
 name           = "list_utils"
 version        = "1.0.0"
-repo           = "https://github.com/yukikurage/katari-list-utils"
+repo           = "https://github.com/katari-lang/katari-list-utils"
 ref            = "abc1234..."         # resolved commit SHA
 sha256         = "0000..."            # tarball SHA-256
 published_time = "2026-05-25T10:30:00Z"
@@ -127,7 +127,7 @@ katari_compiler = "0.1.0"
 
 [packages.list_utils]
 version = "1.0.0"
-repo    = "https://github.com/yukikurage/katari-list-utils"
+repo    = "https://github.com/katari-lang/katari-list-utils"
 ref     = "abc1234..."
 sha256  = "0000..."
 ```
@@ -161,7 +161,7 @@ cat > /tmp/proposal.toml <<EOF
 kind = "add"
 name = "list_utils"
 version = "1.0.0"
-repo = "https://github.com/yukikurage/katari-list-utils"
+repo = "https://github.com/katari-lang/katari-list-utils"
 ref = "v1.0.0"
 EOF
 pnpm tsx src/apply-proposal.ts /tmp/proposal.toml

@@ -2,7 +2,7 @@ name: Build Katari
 description: |
   Build the Katari compiler at the version pinned by
   package-sets/staging.toml's `katari_compiler` field. The git tag
-  must exist on yukikurage/katari as `v<version>`.
+  must exist on katari-lang/katari as `v<version>`.
 
 outputs:
   binary:
@@ -32,7 +32,7 @@ runs:
     - name: Checkout katari compiler
       uses: actions/checkout@v4
       with:
-        repository: yukikurage/katari
+        repository: katari-lang/katari
         ref: v${{ steps.read_version.outputs.version }}
         path: .katari-src
 

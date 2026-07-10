@@ -13,7 +13,7 @@ Edits to this description re-trigger the CI.
 kind = "add"                                       # "add" | "update" | "remove"
 name = "list_utils"                                # Katari identifier ([A-Za-z_][A-Za-z0-9_]*)
 version = "1.0.0"                                  # semver. Omit for "remove"
-repo = "https://github.com/yukikurage/katari-list-utils"  # GitHub HTTPS URL. Omit for "remove"
+repo = "https://github.com/katari-lang/katari-list-utils"  # GitHub HTTPS URL. Omit for "remove"
 ref = "v1.0.0"                                     # tag / branch / commit SHA. Omit for "remove"
 ```
 
