@@ -1,0 +1,6 @@
+name = "calendar"
+version = "0.1.1"
+repo = "https://github.com/katari-lang/katari-package-calendar"
+ref = "948e21e43e84cf10b6c0f800026c147339669fcf"
+sha256 = "43b889fbc7ca81ad66c7bc53f554e978c29972204bef0dd41ca13947e574223f"
+published_time = "2026-07-11T20:06:09.111Z"

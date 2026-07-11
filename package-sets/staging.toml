@@ -7,10 +7,10 @@ ref = "f827337ab486001b8a7779e894808138a5509894"
 sha256 = "920017258241aafd32768e5ce1aae7500fb870323ad8f623021fc39bb9551e91"
 
 [packages.calendar]
-version = "0.1.0"
+version = "0.1.1"
 repo = "https://github.com/katari-lang/katari-package-calendar"
-ref = "3e93e8645568e544db3701c6ee428c45f281efc4"
-sha256 = "a23d7bc3bc2a22588c9b39c27c8dc32969c30c30783a3e83c308dc1688651808"
+ref = "948e21e43e84cf10b6c0f800026c147339669fcf"
+sha256 = "43b889fbc7ca81ad66c7bc53f554e978c29972204bef0dd41ca13947e574223f"
 
 [packages.e2b]
 version = "0.1.0"
