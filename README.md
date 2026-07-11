@@ -78,8 +78,10 @@ The PR CI (`.github/workflows/pr.yml`) will:
 2. Resolve `ref` → compute `sha256` of the GitHub tarball.
 3. Write `packages/<name>/<version>.toml` (the new per-version metadata).
 4. Update `package-sets/staging.toml` to point `<name>` at the new version.
-5. Build the staging set with `katari check` to verify the new
-   configuration still compiles.
+5. Verify the staging set: scaffold a synthetic project importing every
+   package, `katari add` it (fetches each pinned tarball, verifies its
+   sha256 against the pin, and writes `katari.lock`), then `katari check`
+   typechecks the locked closure.
 
 The applied files **are not pushed to the PR branch** — they live only
 inside the CI run. After the PR is merged, `.github/workflows/merge.yml`
@@ -165,7 +167,8 @@ repo = "https://github.com/katari-lang/katari-list-utils"
 ref = "v1.0.0"
 EOF
 pnpm tsx src/apply-proposal.ts /tmp/proposal.toml
-# Then optionally verify (requires katari binary on PATH or via KATARI_BIN):
+# Then optionally verify (needs the katari binary on PATH, or KATARI_BIN pointing at one,
+# and network access to fetch the pinned tarballs):
 pnpm tsx src/verify.ts staging
 ```
 
