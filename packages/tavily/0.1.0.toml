@@ -1,0 +1,6 @@
+name = "tavily"
+version = "0.1.0"
+repo = "https://github.com/katari-lang/katari-package-tavily"
+ref = "2590e15f6ef3852af3d361b019633340501911fe"
+sha256 = "6d59a5fb4d86ef59e73c80531503b512f8f4f977a7a97c216451dec515de286b"
+published_time = "2026-07-11T07:07:55.449Z"

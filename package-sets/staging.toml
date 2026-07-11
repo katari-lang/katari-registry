@@ -1,15 +1,37 @@
-# package-sets/staging.toml
-#
-# Next snapshot candidate. PRs that add / update / remove packages
-# land here first. The nightly CI verifies the full set and, if
-# every package still compiles, cuts a frozen
-# `snapshots/snapshot-<date>-<hash>.toml`.
-#
-# This file is mutable. Downstream projects pinning `snapshot =
-# "staging"` follow the moving edge — useful for catching incompat
-# early; not recommended for production builds.
-
 katari_compiler = "0.1.0"
 
-# No packages yet. The first PR adds them via the PR body proposal flow
-# (see README + .github/PULL_REQUEST_TEMPLATE.md).
+[packages.ai]
+version = "0.1.0"
+repo = "https://github.com/katari-lang/katari-package-ai"
+ref = "f827337ab486001b8a7779e894808138a5509894"
+sha256 = "920017258241aafd32768e5ce1aae7500fb870323ad8f623021fc39bb9551e91"
+
+[packages.calendar]
+version = "0.1.0"
+repo = "https://github.com/katari-lang/katari-package-calendar"
+ref = "3e93e8645568e544db3701c6ee428c45f281efc4"
+sha256 = "a23d7bc3bc2a22588c9b39c27c8dc32969c30c30783a3e83c308dc1688651808"
+
+[packages.e2b]
+version = "0.1.0"
+repo = "https://github.com/katari-lang/katari-package-e2b"
+ref = "dfc7642d68a1a4b4f97af8ce466f8b5ae5ab46d0"
+sha256 = "540737c71325771a58a1e97298def078b1e07450591304c0d9d74afeff95c745"
+
+[packages.imagegen]
+version = "0.1.0"
+repo = "https://github.com/katari-lang/katari-package-imagegen"
+ref = "128d2807795d5646b8c102d7a05f071d24f4ca9d"
+sha256 = "8d5f2bb90de3c580819c5aae035744f815247bb8f95e9dd35725f7247acc2ed1"
+
+[packages.tavily]
+version = "0.1.0"
+repo = "https://github.com/katari-lang/katari-package-tavily"
+ref = "2590e15f6ef3852af3d361b019633340501911fe"
+sha256 = "6d59a5fb4d86ef59e73c80531503b512f8f4f977a7a97c216451dec515de286b"
+
+[packages.web]
+version = "0.1.0"
+repo = "https://github.com/katari-lang/katari-package-web"
+ref = "e93c300ed66d0782f48fcf9351e9e18b9cb92a0e"
+sha256 = "5f2f784c477822b72b487f823a62e5b153db6e4f017be2b200ae11847d3d81ca"
