@@ -3,8 +3,8 @@ katari_compiler = "0.1.0"
 [packages.ai]
 version = "0.1.0"
 repo = "https://github.com/katari-lang/katari-package-ai"
-ref = "cfbe7e676d9d1b1b109a0d5ef28ad53d2c487bae"
-sha256 = "c19d443e5df7358d10cb1a73cab9e435bcd2937dde6a1cb673bfa85277aa2eaf"
+ref = "4ec0b80fd16dcb614c58cae4e8b0da559f5af6e1"
+sha256 = "0a25a03b45c70f08a2f6aa03701cf7bbef0465fff6a3d0b4bc0fc5a86576ab5b"
 
 [packages.discord]
 version = "0.1.0"
