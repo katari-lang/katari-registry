@@ -3,8 +3,8 @@ katari_compiler = "0.1.0"
 [packages.ai]
 version = "0.1.0"
 repo = "https://github.com/katari-lang/katari-package-ai"
-ref = "b06a80943b6e266a8bcaae1c2e1366beef1ec829"
-sha256 = "ec0e43a491ba2e8aafcd5f0ece35441d5306435c66bfc71a3efdf5dd0f306c84"
+ref = "cfbe7e676d9d1b1b109a0d5ef28ad53d2c487bae"
+sha256 = "c19d443e5df7358d10cb1a73cab9e435bcd2937dde6a1cb673bfa85277aa2eaf"
 
 [packages.discord]
 version = "0.1.0"
@@ -21,8 +21,8 @@ sha256 = "540737c71325771a58a1e97298def078b1e07450591304c0d9d74afeff95c745"
 [packages.google_calendar]
 version = "0.1.0"
 repo = "https://github.com/katari-lang/katari-package-google_calendar"
-ref = "12ac037ff3a3f1cc9a4c05b32e97c38416c370a0"
-sha256 = "ba25ed842deda18404c6fc06c18f5f00953f78480d76b5cdc90058423ac9f625"
+ref = "4badb9644051641a9ccd21fadca688ac8cb46a09"
+sha256 = "015616f211fa173f9473020763f7b2500a784dbf66208722709074d4e75d8efe"
 
 [packages.imagegen]
 version = "0.1.0"
@@ -45,5 +45,5 @@ sha256 = "6d59a5fb4d86ef59e73c80531503b512f8f4f977a7a97c216451dec515de286b"
 [packages.web]
 version = "0.1.0"
 repo = "https://github.com/katari-lang/katari-package-web"
-ref = "e93c300ed66d0782f48fcf9351e9e18b9cb92a0e"
-sha256 = "5f2f784c477822b72b487f823a62e5b153db6e4f017be2b200ae11847d3d81ca"
+ref = "b4c658d282882f489e7737ff33c6ef037a067791"
+sha256 = "e98ece20c337c22ae49b247907d24d467a7f8f0114f42bb164467a60fc151ff6"
