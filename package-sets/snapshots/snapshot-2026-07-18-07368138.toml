@@ -3,8 +3,8 @@ katari_compiler = "0.1.0"
 [packages.ai]
 version = "0.1.0"
 repo = "https://github.com/katari-lang/katari-package-ai"
-ref = "a9c9aadaa84a1548dc80d9be33e0f2218ebd789b"
-sha256 = "fc70e530c5d61d81bae6340215be903b4d0805233f69b022e19323b094d161c8"
+ref = "e3274ed0b09198970497c2c8a698016fab483a6d"
+sha256 = "c1bf27cb3207a76013c7fdf5a2edf819ea7afe3be00120cae91929d585d41437"
 
 [packages.discord]
 version = "0.1.0"
@@ -21,8 +21,8 @@ sha256 = "540737c71325771a58a1e97298def078b1e07450591304c0d9d74afeff95c745"
 [packages.google_calendar]
 version = "0.1.0"
 repo = "https://github.com/katari-lang/katari-package-google_calendar"
-ref = "4badb9644051641a9ccd21fadca688ac8cb46a09"
-sha256 = "015616f211fa173f9473020763f7b2500a784dbf66208722709074d4e75d8efe"
+ref = "94208625eb635eb320d4d89e8b1956287f4deb2a"
+sha256 = "175786c619e64fa1cfcb71c00162e9092a9483c92bbf00259b668eccd228484a"
 
 [packages.imagegen]
 version = "0.1.0"
@@ -39,8 +39,8 @@ sha256 = "3a59051e9c0c5a1bb9bfc433634e5f38be1175735e63bb36ce77b7af6646a4a8"
 [packages.tavily]
 version = "0.1.0"
 repo = "https://github.com/katari-lang/katari-package-tavily"
-ref = "2590e15f6ef3852af3d361b019633340501911fe"
-sha256 = "6d59a5fb4d86ef59e73c80531503b512f8f4f977a7a97c216451dec515de286b"
+ref = "29eb6ac248ff618e3474b59849d40fcdc94efd91"
+sha256 = "2767c03671c43fc9a6dd632b721845790f421bb8ad6c1f09050def037dfbc3dc"
 
 [packages.web]
 version = "0.1.0"
