@@ -9,8 +9,8 @@ sha256 = "ec0e43a491ba2e8aafcd5f0ece35441d5306435c66bfc71a3efdf5dd0f306c84"
 [packages.discord]
 version = "0.1.0"
 repo = "https://github.com/katari-lang/katari-package-discord"
-ref = "b93423583ba35d85aca3f0de80823b24cb77f9f9"
-sha256 = "f0d99852fcb0e8573f920cdff8a877428ad7714d0526d3a0b8b22526f30baeee"
+ref = "dd3e30b0a202459406369e06c5ec4b13466af6a7"
+sha256 = "10d96d708ef9f4e11f76a2d0f4ec97ad11e0df87ade5aa77537ac3fb9f44bf58"
 
 [packages.e2b]
 version = "0.1.0"
@@ -33,8 +33,8 @@ sha256 = "8d5f2bb90de3c580819c5aae035744f815247bb8f95e9dd35725f7247acc2ed1"
 [packages.slack]
 version = "0.1.0"
 repo = "https://github.com/katari-lang/katari-package-slack"
-ref = "51617b22d087f825500baef864606a597c55d120"
-sha256 = "192cb8a7d5e27333286fbcec3c0483f5e5c3b7a6523afaf1de9613b1acb7e0f4"
+ref = "86fefd2f5fa3174a5fb3c02046dd0761359c9bca"
+sha256 = "17e9b00305d6c4f7e8e5367fd3abf47b5488ae658f642671c323bde1f0707bc7"
 
 [packages.tavily]
 version = "0.1.0"
