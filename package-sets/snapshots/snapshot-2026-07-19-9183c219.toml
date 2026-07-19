@@ -3,14 +3,14 @@ katari_compiler = "0.1.0"
 [packages.ai]
 version = "0.1.0"
 repo = "https://github.com/katari-lang/katari-package-ai"
-ref = "e3274ed0b09198970497c2c8a698016fab483a6d"
-sha256 = "c1bf27cb3207a76013c7fdf5a2edf819ea7afe3be00120cae91929d585d41437"
+ref = "bc41f04b9612a97968763ce1201cdaafb49455b2"
+sha256 = "5258183522e4549c6d8781c79c85b14be22cb3e652a1143153e7e7e64e48e77d"
 
 [packages.discord]
 version = "0.1.0"
 repo = "https://github.com/katari-lang/katari-package-discord"
-ref = "c690cb847bc6d5c1851471e192a8cd7c5f94733b"
-sha256 = "a4f779c4a1950c3dfd42ff69d172f6701e3ea55d81a3f2b012c51e70ac5da6ad"
+ref = "a89f179b37727a2bababb09a071dad202736278e"
+sha256 = "d45aa3e1a3c2fce03837b03acc2cbca50f0ad7e4e615e57c4b83c28125629415"
 
 [packages.e2b]
 version = "0.1.0"
@@ -27,14 +27,14 @@ sha256 = "175786c619e64fa1cfcb71c00162e9092a9483c92bbf00259b668eccd228484a"
 [packages.imagegen]
 version = "0.1.0"
 repo = "https://github.com/katari-lang/katari-package-imagegen"
-ref = "128d2807795d5646b8c102d7a05f071d24f4ca9d"
-sha256 = "8d5f2bb90de3c580819c5aae035744f815247bb8f95e9dd35725f7247acc2ed1"
+ref = "f65eea1a9b74d56eeedace7a34e8bae8975a617d"
+sha256 = "a92023c735973973269baa02745f5b1d1623748c6da341e20202ed45eaf736a3"
 
 [packages.slack]
 version = "0.1.0"
 repo = "https://github.com/katari-lang/katari-package-slack"
-ref = "7c0b37be498e7ca1b79220113203ac49418b9198"
-sha256 = "3a59051e9c0c5a1bb9bfc433634e5f38be1175735e63bb36ce77b7af6646a4a8"
+ref = "ebcba8fc4cb6cee950dff83b22c62b518f0cea0e"
+sha256 = "d693cab832c56960598a1a896ca777313968dd7254e92a6f04a782889e0fa44c"
 
 [packages.tavily]
 version = "0.1.0"
