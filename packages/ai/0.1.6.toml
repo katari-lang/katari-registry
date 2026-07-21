@@ -1,0 +1,6 @@
+name = "ai"
+version = "0.1.6"
+repo = "https://github.com/katari-lang/katari-package-ai"
+ref = "8477ef845192a611262ee42248eab25c77d7df23"
+sha256 = "c3616037a345a35b77386241f5f49b700c1aeb310d127621fb7cbb38e2328775"
+published_time = "2026-07-21T12:08:42.751Z"
