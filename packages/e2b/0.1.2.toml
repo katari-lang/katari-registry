@@ -1,0 +1,6 @@
+name = "e2b"
+version = "0.1.2"
+repo = "https://github.com/katari-lang/katari-package-e2b"
+ref = "452fd7dc72b79c3a610439726caff190214c19df"
+sha256 = "05316af61892be8b63877d0be836acc2cd6dd31be6a2fbce1371f4c089edb7a7"
+published_time = "2026-07-22T18:46:51.583Z"
