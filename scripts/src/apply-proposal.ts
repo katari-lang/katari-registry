@@ -13,6 +13,7 @@ import { unlink } from "node:fs/promises";
 import {
   type Proposal,
   type Staging,
+  assertVersionMatchesPin,
   compareSemver,
   fetchTarballSha256,
   loadProposal,
@@ -111,6 +112,14 @@ async function writeMetadataAndStage(args: WriteArgs): Promise<void> {
     );
   }
   const resolvedRef = await resolveGitRef(canonicalUrl, ref);
+  // The label written into immutable metadata must match what the package
+  // self-reports at this pin; reject the registration otherwise.
+  await assertVersionMatchesPin({
+    name,
+    version,
+    repo: canonicalUrl,
+    ref: resolvedRef,
+  });
   const sha256 = await fetchTarballSha256(canonicalUrl, resolvedRef);
   await writePackageMeta({
     name,

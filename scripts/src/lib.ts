@@ -149,6 +149,71 @@ export async function fetchTarballSha256(
   return createHash("sha256").update(buf).digest("hex");
 }
 
+// Read the version a package self-reports at a pinned commit, by fetching its
+// katari.toml `[package].version`. Uses the same api.github.com + optional
+// GITHUB_TOKEN path as resolveGitRef so it works on private repos and shares
+// the authenticated rate limit. Returns undefined when the pin's katari.toml
+// omits the (optional) version field.
+export async function fetchPinPackageVersion(
+  repoUrl: string,
+  ref: string,
+): Promise<string | undefined> {
+  const { owner, repo } = parseGitHubUrl(repoUrl);
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/katari.toml?ref=${encodeURIComponent(ref)}`;
+  const headers: Record<string, string> = {
+    // The raw media type returns the file body verbatim instead of the
+    // base64-wrapped JSON envelope.
+    Accept: "application/vnd.github.raw+json",
+    "User-Agent": "katari-registry-scripts",
+  };
+  if (process.env.GITHUB_TOKEN) {
+    headers["Authorization"] = `Bearer ${process.env.GITHUB_TOKEN}`;
+  }
+  const res = await fetch(apiUrl, { headers });
+  if (!res.ok) {
+    throw new Error(
+      `failed to read katari.toml for ${repoUrl} @ ${ref}: HTTP ${res.status} ${await res.text()}`,
+    );
+  }
+  const parsed = TOML.parse(await res.text());
+  const pkg = parsed.package;
+  if (typeof pkg !== "object" || pkg === null || Array.isArray(pkg)) {
+    return undefined;
+  }
+  const version = (pkg as Record<string, unknown>).version;
+  return typeof version === "string" ? version : undefined;
+}
+
+// Reject a registration whose declared version label diverges from the version
+// its pinned ref self-reports. The registry's per-version label is human-facing
+// only — resolution ignores it (Katari.Project.Snapshot decodes repo/ref/sha256
+// and drops `version`) — so a label that lies about the pin is caught here at
+// registration rather than silently persisted into immutable metadata.
+export async function assertVersionMatchesPin(args: {
+  name: string;
+  version: string;
+  repo: string;
+  ref: string;
+}): Promise<void> {
+  const { name, version, repo, ref } = args;
+  const pinVersion = await fetchPinPackageVersion(repo, ref);
+  if (pinVersion === undefined) {
+    throw new Error(
+      `${name}@${version}: the pinned ref (${repo}@${ref}) declares no ` +
+        `[package].version in katari.toml, so the registry label cannot be ` +
+        `backed by the package's self-reported version. Add [package].version ` +
+        `to the package repo, or fix the pin.`,
+    );
+  }
+  if (pinVersion !== version) {
+    throw new Error(
+      `${name}: proposal version label "${version}" does not match the pinned ` +
+        `ref's self-reported [package].version "${pinVersion}" (${repo}@${ref}). ` +
+        `Bump the package's [package].version or fix the proposal label so they agree.`,
+    );
+  }
+}
+
 // ===========================================================================
 // Domain types
 // ===========================================================================
