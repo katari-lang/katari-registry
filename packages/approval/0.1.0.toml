@@ -1,0 +1,6 @@
+name = "approval"
+version = "0.1.0"
+repo = "https://github.com/katari-lang/katari-package-approval"
+ref = "fa679c6ed7cd8bb92ae4eba376bf79206950f57e"
+sha256 = "8e404da2b8507e80a6dfd5ba093e8c1a5a95ac85e725a4cb8bcef0ef10d99e71"
+published_time = "2026-07-24T15:15:55.299Z"
