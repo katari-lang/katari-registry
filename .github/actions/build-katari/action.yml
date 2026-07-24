@@ -39,13 +39,18 @@ runs:
     - uses: haskell-actions/setup@v2
       with:
         enable-stack: true
-        stack-version: latest
+        # Pin to the same stack the katari release.yml builds with, so the
+        # compiler this registry verifies against matches what ships.
+        stack-version: "3.7.1"
 
     - name: Build katari binary
       id: build
       shell: bash
       run: |
         cd .katari-src
-        stack build katari:exe:katari \
+        # The CLI lives in the `katari-cli` package; its executable is `katari`
+        # (see katari release.yml, which builds `katari-cli:katari`). The bare
+        # `katari` package name does not exist and fails resolution.
+        stack build katari-cli:exe:katari \
           --copy-bins --local-bin-path "$GITHUB_WORKSPACE/.katari-bin"
         echo "bin=$GITHUB_WORKSPACE/.katari-bin/katari" >> "$GITHUB_OUTPUT"
