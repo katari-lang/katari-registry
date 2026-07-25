@@ -1,0 +1,6 @@
+name = "web"
+version = "0.1.2"
+repo = "https://github.com/katari-lang/katari-package-web"
+ref = "d0a8798b226a24acd10b33b149ea8f3a75ae7036"
+sha256 = "e67d1f6448c324d44a687f2d694edd45f0a2a2f487ec578fa5e4d203b7c239f9"
+published_time = "2026-07-25T01:51:47.934Z"
