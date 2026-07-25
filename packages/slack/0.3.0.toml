@@ -1,0 +1,6 @@
+name = "slack"
+version = "0.3.0"
+repo = "https://github.com/katari-lang/katari-package-slack"
+ref = "2243686cd9b5be291acbc8f12d7cef38fdf548ca"
+sha256 = "622826fce89bf8e26ca6b74a8a1808b4e2768f625bca28689a3af2c41451156d"
+published_time = "2026-07-25T19:15:13.699Z"
