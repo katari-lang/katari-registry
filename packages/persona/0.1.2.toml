@@ -1,0 +1,6 @@
+name = "persona"
+version = "0.1.2"
+repo = "https://github.com/katari-lang/katari-package-persona"
+ref = "71eb073dded3b5ad12ceb7ac99003cb2672381bb"
+sha256 = "c9245d77a6a2da812654e339ef87ed22b3b84cee046ecf5df7177b301d8492de"
+published_time = "2026-07-26T15:21:46.775Z"

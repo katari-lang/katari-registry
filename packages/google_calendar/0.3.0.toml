@@ -1,0 +1,6 @@
+name = "google_calendar"
+version = "0.3.0"
+repo = "https://github.com/katari-lang/katari-package-google_calendar"
+ref = "935f6cf8d7a42f55c66c6d05993d384c377187dc"
+sha256 = "a336b0bfb48fa9c3c7441326f055ac512f22a2ffb4f41f2f908238c3d6195104"
+published_time = "2026-07-26T15:21:40.117Z"

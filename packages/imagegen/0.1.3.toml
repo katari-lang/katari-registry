@@ -1,0 +1,6 @@
+name = "imagegen"
+version = "0.1.3"
+repo = "https://github.com/katari-lang/katari-package-imagegen"
+ref = "ef58baca67108378ec44aafc63d589355d923e4f"
+sha256 = "f36e849efb386fd64e70a98aa70b36c3a760ff50fb55750c821de40768a0e931"
+published_time = "2026-07-26T15:21:42.359Z"
