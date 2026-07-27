@@ -61,7 +61,10 @@ jobs:
         run: |
           git config user.name 'katari-registry-bot'
           git config user.email 'noreply@github.com'
-          git add package-sets/snapshots
+          # The whole package-sets tree: a cut writes the snapshot file AND its index.toml entry,
+          # and an index that lags the snapshots is exactly what leaves consumers unable to find
+          # the newest set.
+          git add package-sets
           if git diff --cached --quiet; then
             echo "No new snapshot file to commit"
             exit 0

@@ -5,9 +5,9 @@ ecosystem. A **snapshot** is a curated set of (package, version) pairs
 that are guaranteed to compile together.
 
 This repo is **the source of truth for resolution**. The Katari CLI
-(`katari add`, `katari build`, ...) reads a snapshot from here, fetches
-the listed packages, and uses them to satisfy `[dependencies]` in a
-project's `katari.toml`.
+(`katari lock`, `katari add`, `katari update`, ...) reads a snapshot from
+here, fetches the listed packages, and uses them to satisfy
+`[dependencies]` in a project's `katari.toml`.
 
 ## Layout
 
@@ -17,6 +17,7 @@ packages/                            # SSoT: one file per (package, version)
     <version>.toml                   # metadata (repo, ref, sha256, ...)
 package-sets/
   staging.toml                       # next snapshot candidate (= mutable)
+  index.toml                         # every cut and when it was made (append-only)
   snapshots/
     snapshot-<date>-<hash>.toml      # immutable; cut from staging by CI
 scripts/                             # CI helpers (TS via pnpm + tsx)
@@ -47,7 +48,9 @@ snapshot file is **immutable** (= append-only).
 New packages or version bumps land in `staging.toml` first via PR
 merge, then get promoted to a fresh
 `snapshots/snapshot-<date>-<hash>.toml` by the nightly CI when the
-full set still builds.
+full set still builds. Every cut is also recorded in
+[`package-sets/index.toml`](#the-snapshot-index--package-setsindextoml),
+which is how a client finds the newest one.
 
 Compiler-version compatibility is declared at the **snapshot level**
 only — each snapshot is pinned to one `katari_compiler` version.
@@ -81,7 +84,9 @@ The PR CI (`.github/workflows/pr.yml`) will:
 5. Verify the staging set: scaffold a synthetic project importing every
    package, `katari add` it (fetches each pinned tarball, verifies its
    sha256 against the pin, and writes `katari.lock`), then `katari check`
-   typechecks the locked closure.
+   typechecks the locked closure. `check` resolves offline from that
+   lock and refuses if it disagrees with `katari.toml`, so the resolve
+   has to come first.
 
 The applied files **are not pushed to the PR branch** — they live only
 inside the CI run. After the PR is merged, `.github/workflows/merge.yml`
@@ -145,6 +150,43 @@ Same shape as `staging.toml`, just frozen. The `<hash>` is the leading
 8 hex characters of `sha256(staging.toml)` at cut time, giving cuts a
 unique identity even when multiple are made on the same day.
 
+### The snapshot index — `package-sets/index.toml`
+
+```toml
+version = 1
+
+[[snapshots]]
+name            = "snapshot-2026-07-26-a7cc1e51"
+cut_time        = "2026-07-26T18:46:13Z"
+katari_compiler = "0.1.0"
+```
+
+This is how a consumer answers "which snapshots exist, and which is the
+newest" — `katari update` reads it to re-pin a project. It has to be a
+published file: the CLI reaches a registry through a plain raw-file base
+URL, which has no directory listing, and teaching it to call a *host's*
+listing API would tie it to GitHub.
+
+**`cut_time` is the order, and the name is not.** A snapshot's `<hash>`
+tail is content, not time: `snapshot-2026-07-26-a7cc1e51` sorts before
+`snapshot-2026-07-26-bcc95cb3` while being the *newer* cut. Sorting the
+names would silently hand a consumer an older package set, so the order
+is carried as data instead. `cut_time` is always UTC in exactly
+`YYYY-MM-DDTHH:MM:SSZ` — one fixed width, so a client can order the set
+with a string comparison and needs no date parser.
+
+Entries are written oldest-first as a courtesy to readers; that file
+order carries no meaning, and clients order on `cut_time`.
+
+The file is **append-only**. `cut-snapshot.ts` records each cut it makes
+from the same clock reading that names the file, so the entry's date and
+the filename's date always agree. Entries for the snapshots cut before
+the index existed were backfilled by
+[`scripts/src/rebuild-index.ts`](#running-scripts-locally) from the
+authored date of the commit that added each snapshot file — the only
+honest record left of when those cuts happened. A recovered timestamp is
+never allowed to overwrite a recorded one.
+
 ## Why a separate repo
 
 The registry has a different release cadence from the compiler and a
@@ -170,6 +212,9 @@ pnpm tsx src/apply-proposal.ts /tmp/proposal.toml
 # Then optionally verify (needs the katari binary on PATH, or KATARI_BIN pointing at one,
 # and network access to fetch the pinned tarballs):
 pnpm tsx src/verify.ts staging
+# Repair package-sets/index.toml if a cut ever lands without its entry. Idempotent, and it
+# only ever ADDS: it recovers a missing cut_time from git, and leaves recorded ones alone.
+pnpm tsx src/rebuild-index.ts --dry-run
 ```
 
 CI exercises the same entry points (`scripts/src/apply-proposal.ts` /

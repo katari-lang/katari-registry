@@ -3,7 +3,12 @@
 // The output filename is `snapshot-<YYYY-MM-DD>-<8-hex>.toml`, where the
 // 8-hex tail is the leading bytes of sha256(staging.toml). The hash gives
 // the cut a unique identity even if multiple snapshots are cut on the
-// same day; the date sorts them naturally.
+// same day.
+//
+// The cut is also recorded in `package-sets/index.toml`. The filename alone
+// cannot order two cuts made on the same day — the hash tail is content, not
+// time — so the index carries the instant of the cut, taken from the same
+// clock reading the filename's date comes from.
 //
 // Usage:   tsx src/cut-snapshot.ts [--dry-run]
 //
@@ -14,6 +19,8 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import {
+  appendIndexEntry,
+  formatCutTime,
   loadStaging,
   snapshotPath,
   stagingPath,
@@ -30,7 +37,10 @@ async function main(): Promise<void> {
 
   const raw = await readFile(stagingPath, "utf-8");
   const hash = createHash("sha256").update(raw).digest("hex").slice(0, 8);
-  const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  // One clock reading feeds both the filename's date and the index's cut_time,
+  // so the two can never disagree about which day the cut happened on.
+  const cutTime = new Date();
+  const date = cutTime.toISOString().slice(0, 10); // YYYY-MM-DD
   const name = `snapshot-${date}-${hash}`;
   const outPath = snapshotPath(name);
 
@@ -54,6 +64,11 @@ async function main(): Promise<void> {
     ),
   };
   await writeToml(outPath, out);
+  await appendIndexEntry({
+    name,
+    cut_time: formatCutTime(cutTime),
+    katari_compiler: staging.katari_compiler,
+  });
   console.log(name);
 }
 

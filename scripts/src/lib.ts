@@ -16,6 +16,7 @@ export const packagesDir = join(repoRoot, "packages");
 export const packageSetsDir = join(repoRoot, "package-sets");
 export const stagingPath = join(packageSetsDir, "staging.toml");
 export const snapshotsDir = join(packageSetsDir, "snapshots");
+export const indexPath = join(packageSetsDir, "index.toml");
 
 export function packageMetaPath(name: string, version: string): string {
   return join(packagesDir, name, `${version}.toml`);
@@ -329,6 +330,107 @@ export async function writeStaging(staging: Staging): Promise<void> {
     } as unknown as TOML.JsonMap;
   }
   await writeToml(stagingPath, out);
+}
+
+// ===========================================================================
+// Snapshot index IO
+// ===========================================================================
+
+// The index is the registry's answer to "which snapshots exist, and which is
+// the newest". A consumer cannot list `package-sets/snapshots/` — it reaches
+// the registry over a plain raw-file base URL that has no directory listing —
+// and it cannot sort the filenames either: the `<8-hex>` tail is a content
+// hash of staging, so `a7cc1e51` sorts before `bcc95cb3` while being the newer
+// cut. The order therefore has to be carried as data, which is what `cut_time`
+// is for.
+export const INDEX_FORMAT_VERSION = 1;
+
+export interface SnapshotIndexEntry {
+  name: string;
+  // UTC, always exactly `YYYY-MM-DDTHH:MM:SSZ` (see `formatCutTime`). The fixed
+  // width is deliberate: at that shape lexicographic order IS chronological
+  // order, so a client picks the newest cut with a string comparison and needs
+  // no date parser.
+  cut_time: string;
+  katari_compiler: string;
+}
+
+export interface SnapshotIndex {
+  version: number;
+  snapshots: SnapshotIndexEntry[];
+}
+
+// Render an instant the way the index spells one. Milliseconds are dropped so
+// every entry is the same width, which is what makes string ordering sound.
+export function formatCutTime(when: Date): string {
+  return `${when.toISOString().slice(0, 19)}Z`;
+}
+
+export function compareCutTime(a: SnapshotIndexEntry, b: SnapshotIndexEntry): number {
+  return a.cut_time < b.cut_time ? -1 : a.cut_time > b.cut_time ? 1 : 0;
+}
+
+export async function loadIndex(): Promise<SnapshotIndex> {
+  if (!existsSync(indexPath)) {
+    return { version: INDEX_FORMAT_VERSION, snapshots: [] };
+  }
+  const raw = await readToml<Record<string, unknown>>(indexPath);
+  const version = raw.version;
+  if (version !== INDEX_FORMAT_VERSION) {
+    throw new Error(
+      `index.toml: unsupported version ${JSON.stringify(version)} (this tool writes ${INDEX_FORMAT_VERSION})`,
+    );
+  }
+  const rows = raw.snapshots ?? [];
+  if (!Array.isArray(rows)) {
+    throw new Error("index.toml: snapshots must be an array of tables");
+  }
+  const snapshots: SnapshotIndexEntry[] = [];
+  for (const row of rows) {
+    if (typeof row !== "object" || row === null || Array.isArray(row)) {
+      throw new Error("index.toml: every snapshots entry must be a table");
+    }
+    const entry: Record<string, unknown> = { ...row };
+    const name = entry.name;
+    const cutTime = entry.cut_time;
+    const compiler = entry.katari_compiler;
+    if (
+      typeof name !== "string" ||
+      typeof cutTime !== "string" ||
+      typeof compiler !== "string"
+    ) {
+      throw new Error(
+        `index.toml: entry ${JSON.stringify(name)} is missing required string fields name, cut_time, katari_compiler`,
+      );
+    }
+    snapshots.push({ name, cut_time: cutTime, katari_compiler: compiler });
+  }
+  return { version, snapshots };
+}
+
+// Write the index back, oldest cut first. The file order is a courtesy to
+// human readers only — `cut_time` remains the one thing a client orders on, so
+// a hand-edit that reshuffles the rows cannot change which snapshot is newest.
+export async function writeIndex(index: SnapshotIndex): Promise<void> {
+  const sorted = [...index.snapshots].sort(compareCutTime);
+  await writeToml(indexPath, {
+    version: index.version,
+    snapshots: sorted.map((entry) => ({ ...entry })),
+  });
+}
+
+// Add one cut to the index, or report that it is already recorded. The index is
+// append-only for the same reason the snapshots themselves are: an entry states
+// when an immutable file came into being, so a later run has nothing truer to
+// say about it.
+export async function appendIndexEntry(entry: SnapshotIndexEntry): Promise<boolean> {
+  const index = await loadIndex();
+  if (index.snapshots.some((existing) => existing.name === entry.name)) {
+    return false;
+  }
+  index.snapshots.push(entry);
+  await writeIndex(index);
+  return true;
 }
 
 // ===========================================================================

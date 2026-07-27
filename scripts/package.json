@@ -8,6 +8,7 @@
     "apply-proposal": "tsx src/apply-proposal.ts",
     "audit-versions": "tsx src/audit-versions.ts",
     "cut-snapshot": "tsx src/cut-snapshot.ts",
+    "rebuild-index": "tsx src/rebuild-index.ts",
     "verify": "tsx src/verify.ts"
   },
   "devDependencies": {

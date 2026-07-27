@@ -6,12 +6,12 @@
 //      root module imports every package in the snapshot (or the subset
 //      given by --packages). Its [dependencies].registry points at this
 //      repo via a file:// URL so pins resolve against the local layout.
-//   2. `katari add <packages>`: the network resolve. It loads the
-//      snapshot, fetches every pinned tarball, verifies each sha256
-//      against the pin, and writes katari.lock. (`check`/`build` resolve
-//      OFFLINE from that lock, so the registry pins have to be resolved
-//      and locked first — running `check` on an unlocked project only
-//      reports that the lock is missing.)
+//   2. `katari add <packages>`: the network resolve. It declares the
+//      packages in katari.toml and re-locks in the same breath — loading
+//      the snapshot, fetching every pinned tarball, verifying each
+//      sha256 against the pin, and writing katari.lock. (`check`/`build`
+//      resolve OFFLINE from that lock and refuse when it disagrees with
+//      katari.toml, so the pins have to be resolved and locked first.)
 //   3. `katari check`: typecheck the assembled closure — every dep's
 //      modules plus the synthetic root — against the locked sources.
 //
@@ -146,7 +146,8 @@ async function scaffoldProject(
 
   // A minimal VALID katari.toml (Katari.Project.Config): [package] + a REQUIRED [runtime] section
   // (there is no [compile] section — the source dir is [package].src, defaulting to "src"). packages
-  // starts empty; `katari add` fills it in and writes katari.lock.
+  // starts empty; `katari add` fills it in and writes katari.lock. An empty package list beside a
+  // missing lock is deliberately not a mismatch, so the scaffold needs no lock of its own.
   const katariToml = [
     `[package]`,
     `name = "registry_verify_root"`,

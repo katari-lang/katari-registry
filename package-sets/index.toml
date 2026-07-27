@@ -1,0 +1,131 @@
+version = 1
+
+[[snapshots]]
+name = "snapshot-2026-07-19-9183c219"
+cut_time = "2026-07-19T00:52:54Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-20-b4b01793"
+cut_time = "2026-07-20T12:46:09Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-20-9d96f75d"
+cut_time = "2026-07-20T18:44:08Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-20-c25d633a"
+cut_time = "2026-07-20T19:18:09Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-21-a5ace97b"
+cut_time = "2026-07-21T05:57:06Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-21-ec72e5bb"
+cut_time = "2026-07-21T10:51:28Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-21-f2881e42"
+cut_time = "2026-07-21T12:08:49Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-22-07be86c8"
+cut_time = "2026-07-22T01:37:06Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-22-236cb5bc"
+cut_time = "2026-07-22T05:19:42Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-22-d34aea9b"
+cut_time = "2026-07-22T06:21:04Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-22-95835c8d"
+cut_time = "2026-07-22T18:49:30Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-22-18562314"
+cut_time = "2026-07-22T19:05:03Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-22-982f6f6d"
+cut_time = "2026-07-22T19:38:58Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-22-b45f7db0"
+cut_time = "2026-07-22T19:50:25Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-23-6cdd19b2"
+cut_time = "2026-07-23T05:25:20Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-23-b4eda367"
+cut_time = "2026-07-23T06:08:48Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-23-27670049"
+cut_time = "2026-07-23T10:20:23Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-23-04d03bcd"
+cut_time = "2026-07-23T12:26:33Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-24-cd5e34a6"
+cut_time = "2026-07-24T15:17:16Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-25-df58f3a7"
+cut_time = "2026-07-25T01:52:39Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-25-a7f84398"
+cut_time = "2026-07-25T19:15:54Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-25-7b1f6795"
+cut_time = "2026-07-25T19:32:19Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-26-1412a42b"
+cut_time = "2026-07-26T06:12:50Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-26-bcc95cb3"
+cut_time = "2026-07-26T07:38:02Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-26-75ff0157"
+cut_time = "2026-07-26T15:24:20Z"
+katari_compiler = "0.1.0"
+
+[[snapshots]]
+name = "snapshot-2026-07-26-a7cc1e51"
+cut_time = "2026-07-26T18:46:13Z"
+katari_compiler = "0.1.0"
