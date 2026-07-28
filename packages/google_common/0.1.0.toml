@@ -1,0 +1,6 @@
+name = "google_common"
+version = "0.1.0"
+repo = "https://github.com/katari-lang/katari-package-google_common"
+ref = "e3a4b1a8aec3bfacb1cbceb30524622a467d03db"
+sha256 = "e1ed1591dc500c0f0ed9c248cde174c1aff49920a014310cab0c2fffcd13ea54"
+published_time = "2026-07-28T10:40:54.177Z"
