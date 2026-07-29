@@ -139,3 +139,8 @@ katari_compiler = "0.1.0"
 name = "snapshot-2026-07-29-a33f9ff5"
 cut_time = "2026-07-29T14:23:42Z"
 katari_compiler = "0.1.0-rc12"
+
+[[snapshots]]
+name = "snapshot-2026-07-29-9f07b447"
+cut_time = "2026-07-29T14:51:50Z"
+katari_compiler = "0.1.0-rc12"
