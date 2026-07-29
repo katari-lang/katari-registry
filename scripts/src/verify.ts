@@ -1,6 +1,6 @@
 // Verify that a snapshot (or staging) builds end-to-end.
 //
-// The verify is a 3-step process:
+// The verify is a 4-step process:
 //
 //   1. Construct a synthetic Katari project in a temp directory whose
 //      root module imports every package in the snapshot (or the subset
@@ -14,6 +14,12 @@
 //      katari.toml, so the pins have to be resolved and locked first.)
 //   3. `katari check`: typecheck the assembled closure — every dep's
 //      modules plus the synthetic root — against the locked sources.
+//   4. The same check again, with every ```katari fence of every fetched
+//      package's README.md written into the project as one more module.
+//      A package's examples are the first Katari a new user runs, and a
+//      snapshot whose examples do not compile against it is a snapshot
+//      that costs every newcomer an afternoon. See readme-examples.ts
+//      for what a fence has to be for this to hold.
 //
 // Usage:
 //   tsx src/verify.ts <snapshot-path-or-staging>
@@ -36,6 +42,14 @@ import {
   stagingPath,
   type StagingEntry,
 } from "./lib.js";
+import {
+  locateExampleDiagnostics,
+  writeReadmeExampleModules,
+} from "./readme-examples.js";
+
+// The synthetic project's package name, and so the namespace every module it provides must sit
+// under — the root module itself and the README examples alike.
+const ROOT_MODULE = "registry_verify_root";
 
 interface SnapshotData {
   katari_compiler: string;
@@ -73,6 +87,7 @@ async function main(): Promise<void> {
       throw new Error(`katari check failed in ${projectDir}`);
     }
     console.log(`verified ${selectedNames.length} packages`);
+    await verifyReadmeExamples(projectDir, selectedNames);
   } finally {
     if (!process.env.KATARI_VERIFY_KEEP_TMP) {
       await rm(projectDir, { recursive: true, force: true });
@@ -150,7 +165,9 @@ async function scaffoldProject(
   // missing lock is deliberately not a mismatch, so the scaffold needs no lock of its own.
   const katariToml = [
     `[package]`,
-    `name = "registry_verify_root"`,
+    // The package name IS the namespace every module it provides must sit under, so the root
+    // module and the README examples are both named from this one constant.
+    `name = "${ROOT_MODULE}"`,
     ``,
     `[runtime]`,
     // Never contacted by `add`/`check` (both resolve locally); the URL only satisfies the schema.
@@ -167,7 +184,7 @@ async function scaffoldProject(
   await mkdir(join(projectDir, "src"), { recursive: true });
   const imports = selected.map((n) => `import ${n}`).join("\n");
   const main = `${imports}\n\nagent main() -> null { null }\n`;
-  await writeFile(join(projectDir, "src", "registry_verify_root.ktr"), main, "utf-8");
+  await writeFile(join(projectDir, "src", `${ROOT_MODULE}.ktr`), main, "utf-8");
 
   // Make sure the registry layout the synthetic project resolves
   // against is what we built. Sanity check by reading the same
@@ -177,6 +194,38 @@ async function scaffoldProject(
       ? stagingPath
       : join(packageSetsDir, "snapshots", `${snapshot.registrySnapshotName}.toml`);
   await readToml(checkPath);
+}
+
+// Step 4: the packages' own README examples, compiled against the closure just verified.
+//
+// The examples are written into the project that is ALREADY resolved and already typechecks, so this
+// costs one more `katari check` and no network at all: whatever a fence says, it says about the very
+// versions this snapshot pins. The check is run separately from step 3 rather than folded into it so
+// that a failure here is unambiguous — the package set compiles, and it is the documentation that
+// has gone stale.
+async function verifyReadmeExamples(
+  projectDir: string,
+  selectedNames: string[],
+): Promise<void> {
+  const modules = await writeReadmeExampleModules(projectDir, ROOT_MODULE, selectedNames);
+  if (modules.length === 0) {
+    console.log("no README examples to verify");
+    return;
+  }
+  const outcome = runKatariCapturing(["check"], projectDir);
+  if (!outcome.ok) {
+    // Diagnostics name the synthetic module and a line inside it; rewrite them to the README and the
+    // line a reader can open, because "fix your example" is only actionable with the example named.
+    throw new Error(
+      `README example check failed — ${modules.length} example(s) from ` +
+        `${new Set(modules.map((m) => m.packageName)).size} package(s):\n` +
+        locateExampleDiagnostics(outcome.output, ROOT_MODULE, modules) +
+        `\nEvery \`\`\`katari fence in a package README must compile on its own against the ` +
+        `snapshot. Fix the example, fence it \`\`\`katari continues if it continues the block above ` +
+        `it, or re-fence it as \`\`\`text if it is not Katari source.`,
+    );
+  }
+  console.log(`verified ${modules.length} README example(s)`);
 }
 
 // Run one katari subcommand against the scaffolded project. `-C DIR` selects the project directory
@@ -193,6 +242,24 @@ function runKatari(args: string[], projectDir: string): boolean {
     );
   }
   return result.status === 0;
+}
+
+// `runKatari` with the output kept rather than inherited, for the one step that rewrites diagnostics
+// before printing them.
+function runKatariCapturing(
+  args: string[],
+  projectDir: string,
+): { ok: boolean; output: string } {
+  const katari = process.env.KATARI_BIN ?? "katari";
+  const result = spawnSync(katari, [...args, "-C", projectDir], {
+    encoding: "utf-8",
+  });
+  if (result.error) {
+    throw new Error(
+      `failed to run '${katari} ${args.join(" ")}': ${result.error.message}. Set KATARI_BIN to override the binary path.`,
+    );
+  }
+  return { ok: result.status === 0, output: `${result.stdout ?? ""}${result.stderr ?? ""}` };
 }
 
 main().catch((err) => {

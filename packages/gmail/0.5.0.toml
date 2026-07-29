@@ -1,0 +1,6 @@
+name = "gmail"
+version = "0.5.0"
+repo = "https://github.com/katari-lang/katari-package-gmail"
+ref = "b96c38766ba78d0faab80a3eedfdb6d1850d0527"
+sha256 = "5cb957fc1a2bb8366658ffe745b837e6e3c356623b8ba42ab5039b3d047ca651"
+published_time = "2026-07-29T14:20:55.372Z"

@@ -43,6 +43,15 @@ jobs:
         id: katari
         uses: ./.github/actions/build-katari
 
+      - name: Test the scripts
+        working-directory: scripts
+        env:
+          KATARI_BIN: ${{ steps.katari.outputs.binary }}
+        run: pnpm test
+
+      # Typechecks the package set AND every ```katari example in the fetched
+      # packages' READMEs: a cut whose documented examples do not compile is a
+      # cut that costs every newcomer an afternoon.
       - name: Verify full staging set
         working-directory: scripts
         env:

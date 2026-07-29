@@ -6,7 +6,10 @@ name: PR verify
 #   2. Applies the proposal to a clean checkout (= writes
 #      packages/<pkg>/<version>.toml + updates staging.toml).
 #   3. Builds the Katari compiler at the version pinned by staging.toml.
-#   4. Runs `verify.ts staging` to typecheck the new staging set.
+#   4. Runs the scripts' own tests (the README gate's included — its
+#      end-to-end half needs the compiler, hence the order).
+#   5. Runs `verify.ts staging` to typecheck the new staging set AND every
+#      ```katari example in the fetched packages' READMEs.
 #
 # The applied files are NOT pushed back to the PR branch — they live
 # only in this workflow run. On merge (= merge.yml) the same apply
@@ -60,6 +63,12 @@ jobs:
       - name: Build katari (version from staging.toml)
         id: katari
         uses: ./.github/actions/build-katari
+
+      - name: Test the scripts
+        working-directory: scripts
+        env:
+          KATARI_BIN: ${{ steps.katari.outputs.binary }}
+        run: pnpm test
 
       - name: Verify staging
         working-directory: scripts

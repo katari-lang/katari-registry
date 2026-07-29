@@ -9,7 +9,9 @@
     "audit-versions": "tsx src/audit-versions.ts",
     "cut-snapshot": "tsx src/cut-snapshot.ts",
     "rebuild-index": "tsx src/rebuild-index.ts",
-    "verify": "tsx src/verify.ts"
+    "verify": "tsx src/verify.ts",
+    "test": "tsx --test src/*.test.ts",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@iarna/toml": "^2.2.5",

@@ -87,6 +87,37 @@ The PR CI (`.github/workflows/pr.yml`) will:
    typechecks the locked closure. `check` resolves offline from that
    lock and refuses if it disagrees with `katari.toml`, so the resolve
    has to come first.
+6. Verify the **README examples**: every ` ```katari ` fence in every
+   fetched package's `README.md` becomes one more module in that same
+   project and `katari check` runs again. See below.
+
+### The README example gate
+
+A package's README is the first Katari a new user runs, so a fence in one
+is not a picture of code — it is code, compiled against the very versions
+the snapshot pins. Two rules follow, and they are the package author's:
+
+- **A ` ```katari ` block must be a whole module.** Its own `import`
+  lines, its own declarations. A snippet that only reads inside a
+  surrounding agent has to grow that agent — which is usually the better
+  example anyway, since the effect row is half of what a reader came for.
+- **A block that continues the one above it is fenced ` ```katari
+  continues `**, and is compiled with every earlier block of the same
+  README prepended. That is the only way two fences share a scope, and it
+  is declared rather than inferred: "this one happens to reference that
+  one" is not something a reader can see or a checker should guess.
+
+Anything that is **not Katari source** — a signature listing, a shell
+transcript, a rendered error message — takes some other info string
+(` ```text `) and is never compiled. That is the whole opt-out, and it is
+machine-readable on purpose: `katari` means *this compiles*.
+
+A failure names the package's README and the line inside it, not the
+synthetic module the block was compiled as. The implementation is
+[`scripts/src/readme-examples.ts`](scripts/src/readme-examples.ts), and
+`scripts/src/readme-examples.test.ts` holds its tests — including the one
+that matters, a fixture README with a stale example that has to turn the
+check red.
 
 The applied files **are not pushed to the PR branch** — they live only
 inside the CI run. After the PR is merged, `.github/workflows/merge.yml`
@@ -210,14 +241,18 @@ ref = "v1.0.0"
 EOF
 pnpm tsx src/apply-proposal.ts /tmp/proposal.toml
 # Then optionally verify (needs the katari binary on PATH, or KATARI_BIN pointing at one,
-# and network access to fetch the pinned tarballs):
+# and network access to fetch the pinned tarballs). This also checks every ```katari example
+# in the fetched packages' READMEs:
 pnpm tsx src/verify.ts staging
+# The scripts' own tests. The README gate's end-to-end half needs a katari binary and skips
+# with a notice when there is none; everything else runs anywhere:
+pnpm test
 # Repair package-sets/index.toml if a cut ever lands without its entry. Idempotent, and it
 # only ever ADDS: it recovers a missing cut_time from git, and leaves recorded ones alone.
 pnpm tsx src/rebuild-index.ts --dry-run
 ```
 
 CI exercises the same entry points (`scripts/src/apply-proposal.ts` /
-`scripts/src/verify.ts` / `scripts/src/cut-snapshot.ts`), with the
-extra step of extracting the proposal TOML from the PR body via
+`scripts/src/verify.ts` / `scripts/src/cut-snapshot.ts`) plus `pnpm test`,
+with the extra step of extracting the proposal TOML from the PR body via
 `scripts/src/extract-proposal.ts`.
