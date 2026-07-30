@@ -1,0 +1,79 @@
+katari_compiler = "0.1.0"
+
+[packages.ai]
+version = "0.4.0"
+repo = "https://github.com/katari-lang/katari-package-ai"
+ref = "de9084ff05a213ae7a278489f2ea35d8339693d9"
+sha256 = "a0f71ea43f2065bfdfee35906ff12cf490a638a4b2777f736f046f1a0c4e821a"
+
+[packages.discord]
+version = "0.6.0"
+repo = "https://github.com/katari-lang/katari-package-discord"
+ref = "4e997d238e6975263711a3202c29f90376e1ba96"
+sha256 = "244c8e215d2229eb1234d099f0a9cfb40c2f7f8951defbe63d780f8bf017e867"
+
+[packages.e2b]
+version = "0.4.0"
+repo = "https://github.com/katari-lang/katari-package-e2b"
+ref = "811d166be5ea139cf80b6217a234b5d2b637cea4"
+sha256 = "bb0b105eb91bfc9135dcdfc9fc365663ff9225cd855223c5515417d0d4aaa924"
+
+[packages.fleet]
+version = "0.1.0"
+repo = "https://github.com/katari-lang/katari-package-fleet"
+ref = "bd6a647c18f53ca68857cd0b0049f8fb4efa592b"
+sha256 = "f9e6780c7b8a174be32a39d71204f29a06f4760b9cf19ed5d3e217e8cc859cc0"
+
+[packages.gmail]
+version = "0.5.3"
+repo = "https://github.com/katari-lang/katari-package-gmail"
+ref = "f3ee977410df1728f84321d4ee3d832209ce1472"
+sha256 = "338ee913602dbb364e4410d390e7c8f696c842c1f80a52c08f18123cd3c14bc2"
+
+[packages.google_calendar]
+version = "0.5.2"
+repo = "https://github.com/katari-lang/katari-package-google_calendar"
+ref = "2b95204a874f5b71d46b4f1787b1570ec778cbb3"
+sha256 = "62c475c6ae5812495dd6c23f6d7d03c88c9496fa12db0089fa4b9d70e8832db3"
+
+[packages.google_common]
+version = "0.2.0"
+repo = "https://github.com/katari-lang/katari-package-google_common"
+ref = "b9501d2f37e32713afe40edc61569870566b3b92"
+sha256 = "fca1432cfd857a20c4484e1fe7903b7a3f642cde8ee4194969fd8a696fd739b5"
+
+[packages.imagegen]
+version = "0.3.0"
+repo = "https://github.com/katari-lang/katari-package-imagegen"
+ref = "b5e35a9cf1cb529f762a12784297aac9ec2376de"
+sha256 = "087465c2c4c0c1242e6a9effa6bf260c91d4ba110f28a7d80889197de9b34879"
+
+[packages.memory]
+version = "0.4.1"
+repo = "https://github.com/katari-lang/katari-package-memory"
+ref = "44bbc5bf5ec824b2736b96e6c16b3dea8b511262"
+sha256 = "7cbd3167f3acda0f2931ded2e0212f5a266d0d500272b6fddb5b4a645b9a7435"
+
+[packages.persona]
+version = "0.1.3"
+repo = "https://github.com/katari-lang/katari-package-persona"
+ref = "cebf9ba5f5789157e7e8d54afc21da883d51a857"
+sha256 = "5f7f37b4198c2c1bd8251af1aa681ca3f9a5a779e25ea40f19a13b7f6b25f7af"
+
+[packages.slack]
+version = "0.4.0"
+repo = "https://github.com/katari-lang/katari-package-slack"
+ref = "892064e936afeb939c10fccbb7785f23ae6e7577"
+sha256 = "0901c80d5f7e9db740cedd153b2a85d40ae06f9daa9e861d0d39d90f4741c7b5"
+
+[packages.tavily]
+version = "0.3.0"
+repo = "https://github.com/katari-lang/katari-package-tavily"
+ref = "76e97c8d62e2fa1fb4dd320d3a3dcb7b5a6df186"
+sha256 = "6162b74fed8462af0ec3a3ac9789d9ad601de38e79b2512e792aa3c7c69668d4"
+
+[packages.web]
+version = "0.2.0"
+repo = "https://github.com/katari-lang/katari-package-web"
+ref = "45ed57e314c4cd0907b7c0bc0fb88160a38ef775"
+sha256 = "627371909ce9da94f4109035de51c33b8ac37e2ead5559e76d1eb412f6741690"
