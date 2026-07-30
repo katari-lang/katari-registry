@@ -1,0 +1,6 @@
+name = "memory"
+version = "0.5.0"
+repo = "https://github.com/katari-lang/katari-package-memory"
+ref = "cbf3af09804230d466d8037ad39bee3f569e0938"
+sha256 = "febe671d52cb6199decac26a07d34a3371fa6d6e1041879d85f15a6b5c945663"
+published_time = "2026-07-30T15:07:40.730Z"
