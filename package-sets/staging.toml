@@ -25,22 +25,22 @@ ref = "bd6a647c18f53ca68857cd0b0049f8fb4efa592b"
 sha256 = "f9e6780c7b8a174be32a39d71204f29a06f4760b9cf19ed5d3e217e8cc859cc0"
 
 [packages.gmail]
-version = "0.5.4"
+version = "0.5.5"
 repo = "https://github.com/katari-lang/katari-package-gmail"
-ref = "f94812a503c4a49fc88bc4728202c2d6d5bce602"
-sha256 = "e548a3c3d0dd6740dc12e42bc2c865642445831767bfde9352adc9977b2bf6d6"
+ref = "7b0d30f81ad126db44683518164797dee69a0f90"
+sha256 = "fe4ba19df3dc31607dda85a7575e92f62cb35542c008a75d8b87e06b05aa3ed3"
 
 [packages.google_calendar]
-version = "0.5.3"
+version = "0.5.4"
 repo = "https://github.com/katari-lang/katari-package-google_calendar"
-ref = "205ec90b3bcff6b3d9c61fb4cf8626532fade429"
-sha256 = "0acf9e2de224531788e568b3aa5647a06cc7d0c4bf390cee0e837a196ef964bd"
+ref = "8a2f5b5d5d9542b5c4648bfb4845c969e9818b50"
+sha256 = "22df54b68e63fdaa41563fe6a9342196ec6c1818fe2419448224f7698c5216e3"
 
 [packages.google_common]
-version = "0.2.0"
+version = "0.2.1"
 repo = "https://github.com/katari-lang/katari-package-google_common"
-ref = "b9501d2f37e32713afe40edc61569870566b3b92"
-sha256 = "fca1432cfd857a20c4484e1fe7903b7a3f642cde8ee4194969fd8a696fd739b5"
+ref = "494b8609140ab5125c9411578afe41e82503c012"
+sha256 = "f0be6f11959abbe7dac2dbf632a56d057addfdad5cc7c5e5109746c1918904a8"
 
 [packages.imagegen]
 version = "0.3.0"
@@ -61,10 +61,10 @@ ref = "cebf9ba5f5789157e7e8d54afc21da883d51a857"
 sha256 = "5f7f37b4198c2c1bd8251af1aa681ca3f9a5a779e25ea40f19a13b7f6b25f7af"
 
 [packages.slack]
-version = "0.5.0"
+version = "0.6.0"
 repo = "https://github.com/katari-lang/katari-package-slack"
-ref = "e66a32dda516c6aa31f8d8d74e4f8689d75905f3"
-sha256 = "0157a23495889270b09844a28794bbe79865268739c6c94c8ef9e610a621e91c"
+ref = "5e91101c58fad876401f242f8d6692c26e8b408b"
+sha256 = "e7118343bffb1045bd1f2af34bf53fb64504f019de03cd1b98e62a6612148439"
 
 [packages.tavily]
 version = "0.3.0"
