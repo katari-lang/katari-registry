@@ -1,0 +1,6 @@
+name = "discord"
+version = "0.9.0"
+repo = "https://github.com/katari-lang/katari-package-discord"
+ref = "ac2b88af31e378f73878577d938310551de701a8"
+sha256 = "2aa7413f57fb2eba5ed119a9503c0fec881a524331ec5d45762322e9024fc838"
+published_time = "2026-08-02T03:16:27.069Z"

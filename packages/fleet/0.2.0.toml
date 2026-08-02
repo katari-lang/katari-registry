@@ -1,0 +1,6 @@
+name = "fleet"
+version = "0.2.0"
+repo = "https://github.com/katari-lang/katari-package-fleet"
+ref = "41f7fd3afa49b0196d25ee840463a3df2ce207c8"
+sha256 = "8512b9e3399c970960e9d3a500ce1abe425eecaa5f092a2f12ebecc64bae1616"
+published_time = "2026-08-02T03:16:32.021Z"
